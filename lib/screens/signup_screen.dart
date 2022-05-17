@@ -4,22 +4,26 @@ import 'package:instagram_flutter/utils/colors.dart';
 
 import '../widgets/text_field_input.dart';
 
-class LoginScreen extends StatefulWidget {
-  LoginScreen({Key? key}) : super(key: key);
+class SignupScreen extends StatefulWidget {
+  SignupScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _biocontroller = TextEditingController();
+  final TextEditingController _usernamecontroller = TextEditingController();
 
   // This is the method that will be called when the user taps the login button.
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _biocontroller.dispose();
+    _usernamecontroller.dispose();
   }
 
   @override
@@ -40,6 +44,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 64,
                     ),
                     const SizedBox(height: 64),
+                    // field input for avatar, circular widget to accept and show pic
+                    Stack(children: [
+                      CircleAvatar(
+                        radius: 64,
+                        backgroundImage: NetworkImage(
+                            "https://images.unsplash.com/photo-1463852247062-1bbca38f7805?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2076&q=80"),
+                      ),
+                    ]),
+                    // text field input for username
+                    TextFieldInput(
+                      textEditingController: _usernamecontroller,
+                      hintText: 'Enter your username',
+                      textInputType: TextInputType.name,
+                    ),
+                    const SizedBox(height: 16),
+                    // text field input for bio
+                    TextFieldInput(
+                      textEditingController: _biocontroller,
+                      hintText: 'Enter your bio',
+                      textInputType: TextInputType.text,
+                    ),
+                    const SizedBox(height: 16),
                     // text filed input for email address
                     TextFieldInput(
                       textEditingController: _emailController,
@@ -55,6 +81,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       textInputType: TextInputType.text,
                     ),
                     const SizedBox(height: 16),
+
+                    //
                     // button for login, use Container
                     InkWell(
                       child: Container(
