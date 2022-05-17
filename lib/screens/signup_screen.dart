@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram_flutter/resources/auth_methods.dart';
 import 'package:instagram_flutter/utils/colors.dart';
 
 import '../widgets/text_field_input.dart';
@@ -51,7 +52,14 @@ class _SignupScreenState extends State<SignupScreen> {
                         backgroundImage: NetworkImage(
                             "https://images.unsplash.com/photo-1463852247062-1bbca38f7805?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2076&q=80"),
                       ),
+                      Positioned(
+                        child: IconButton(
+                            icon: Icon(Icons.add_a_photo), onPressed: () {}),
+                        bottom: -10,
+                        right: -10,
+                      )
                     ]),
+                    const SizedBox(height: 16),
                     // text field input for username
                     TextFieldInput(
                       textEditingController: _usernamecontroller,
@@ -85,8 +93,16 @@ class _SignupScreenState extends State<SignupScreen> {
                     //
                     // button for login, use Container
                     InkWell(
+                      onTap: () async {
+                        String res = await AuthMethods().signUpUser(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                            username: _usernamecontroller.text,
+                            bio: _biocontroller.text);
+                        print(res);
+                      },
                       child: Container(
-                        child: const Text('Log In'),
+                        child: const Text('Sign Up'),
                         width: double.infinity,
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(vertical: 16),
