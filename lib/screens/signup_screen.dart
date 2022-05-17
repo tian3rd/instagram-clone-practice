@@ -71,7 +71,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                   "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg")),
                       Positioned(
                         child: IconButton(
-                            icon: Icon(Icons.add_a_photo), onPressed: () {}),
+                            icon: Icon(Icons.add_a_photo),
+                            onPressed: selectImage),
                         bottom: -10,
                         right: -10,
                       )
