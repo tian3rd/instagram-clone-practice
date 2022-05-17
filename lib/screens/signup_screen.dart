@@ -1,8 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:instagram_flutter/resources/auth_methods.dart';
 import 'package:instagram_flutter/utils/colors.dart';
 
+import '../utils/utils.dart';
 import '../widgets/text_field_input.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -17,6 +21,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _biocontroller = TextEditingController();
   final TextEditingController _usernamecontroller = TextEditingController();
+  Uint8List? _image; // can be null
 
   // This is the method that will be called when the user taps the login button.
   @override
@@ -25,6 +30,14 @@ class _SignupScreenState extends State<SignupScreen> {
     _passwordController.dispose();
     _biocontroller.dispose();
     _usernamecontroller.dispose();
+  }
+
+  void selectImage() async {
+    // use gallery to open user's photo gallery
+    Uint8List image = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = image;
+    });
   }
 
   @override
@@ -47,11 +60,15 @@ class _SignupScreenState extends State<SignupScreen> {
                     const SizedBox(height: 64),
                     // field input for avatar, circular widget to accept and show pic
                     Stack(children: [
-                      CircleAvatar(
-                        radius: 64,
-                        backgroundImage: NetworkImage(
-                            "https://images.unsplash.com/photo-1463852247062-1bbca38f7805?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2076&q=80"),
-                      ),
+                      _image != null
+                          ? CircleAvatar(
+                              radius: 64,
+                              backgroundImage: MemoryImage(_image!),
+                            )
+                          : CircleAvatar(
+                              radius: 64,
+                              backgroundImage: NetworkImage(
+                                  "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg")),
                       Positioned(
                         child: IconButton(
                             icon: Icon(Icons.add_a_photo), onPressed: () {}),
