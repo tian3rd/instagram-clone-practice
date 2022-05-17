@@ -22,6 +22,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _biocontroller = TextEditingController();
   final TextEditingController _usernamecontroller = TextEditingController();
   Uint8List? _image; // can be null
+  bool _isLoading = false;
 
   // This is the method that will be called when the user taps the login button.
   @override
@@ -38,6 +39,25 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() {
       _image = image;
     });
+  }
+
+  void signUpUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethods().signUpUser(
+        email: _emailController.text,
+        password: _passwordController.text,
+        username: _usernamecontroller.text,
+        bio: _biocontroller.text,
+        profileImage: _image!);
+    print(res);
+    setState(() {
+      _isLoading = false;
+    });
+    if (res != 'success') {
+      showSnackBar(res, context);
+    } else {}
   }
 
   @override
@@ -111,17 +131,22 @@ class _SignupScreenState extends State<SignupScreen> {
                     //
                     // button for login, use Container
                     InkWell(
-                      onTap: () async {
-                        String res = await AuthMethods().signUpUser(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                            username: _usernamecontroller.text,
-                            bio: _biocontroller.text,
-                            profileImage: _image!);
-                        print(res);
-                      },
+                      onTap: signUpUser,
                       child: Container(
-                        child: const Text('Sign Up'),
+                        child: _isLoading
+                            // // FIXME: size is too large for indicator
+                            // ? const Center(
+                            //     child: CircularProgressIndicator(
+                            //     color: primaryColor,
+                            //   ))
+                            ? const Text(
+                                "Signing Up...",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              )
+                            : const Text('Sign Up'),
                         width: double.infinity,
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(vertical: 16),
