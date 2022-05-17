@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/resources/storage_methods.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -14,7 +15,7 @@ class AuthMethods {
     required String password,
     required String username,
     required String bio,
-    // required Uint8List profileImage,
+    required Uint8List profileImage,
   }) async {
     String res = "Some error occurred";
     try {
@@ -27,6 +28,13 @@ class AuthMethods {
         UserCredential userCredential = await _auth
             .createUserWithEmailAndPassword(email: email, password: password);
         print(userCredential.user!.uid);
+
+        String photoUrl = await StorageMethods().uploadImageToStorage(
+          "profileImages",
+          profileImage,
+          false,
+        );
+
         // add user to database, create 'users' if it's not existed
         await _firestore.collection('users').doc(userCredential.user!.uid).set({
           'username': username,
@@ -36,6 +44,7 @@ class AuthMethods {
           // 'profile_image': profileImage,
           'followers': [],
           'following': [],
+          'photo_url': photoUrl,
         });
 
         // // another way which the doc id is different from uid
